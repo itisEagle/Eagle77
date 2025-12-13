@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special TP - Free Fire Tournament & Top-up</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-900 flex flex-col items-center justify-center p-6 fade-in">
+        <div class="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-blue-500 mb-2">Special TP</h1>
+                <p class="text-slate-400">Free Fire Tournaments & Top-up</p>
+            </div>
+            
+            <div id="login-form">
+                <h2 class="text-xl font-semibold mb-4">Login / Register</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">Gmail</label>
+                        <input type="email" id="auth-email" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none" placeholder="example@gmail.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">Password</label>
+                        <div class="relative">
+                            <input type="password" id="auth-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none pr-10" placeholder="Enter password">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                                <i id="password-toggle-icon" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="username-field" class="hidden">
+                        <label class="block text-sm text-slate-400 mb-1">Username (FF Name)</label>
+                        <input type="text" id="auth-username" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none" placeholder="ProPlayer123">
+                    </div>
+                    <div id="confirm-password-field" class="hidden">
+                        <label class="block text-sm text-slate-400 mb-1">Confirm Password</label>
+                        <input type="password" id="auth-confirm-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 outline-none" placeholder="Confirm password">
+                    </div>
+                    <button onclick="handleAuth()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">
+                        Enter App
+                    </button>
+                    <p class="text-xs text-center text-slate-500 mt-4">First time users will be registered automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP LAYOUT (Hidden initially) -->
+    <div id="app-container" class="hidden flex-col h-full w-full max-w-md mx-auto bg-slate-900 shadow-2xl relative">
+        
+        <!-- HEADER -->
+        <header class="bg-slate-800 p-4 flex justify-between items-center shadow-lg z-20">
+            <div class="flex items-center gap-3">
+                <div id="header-avatar" class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-lg font-bold">U</div>
+                <div>
+                    <h3 id="header-username" class="font-bold text-sm leading-tight">User</h3>
+                    <span class="text-xs text-slate-400">UID: <span id="header-id">000</span></span>
+                </div>
+            </div>
+            <div class="bg-slate-900 px-3 py-1.5 rounded-full border border-slate-700 flex items-center gap-2 cursor-pointer" onclick="showSection('profile'); openAddMoneyModal()">
+                <i class="fas fa-gem text-blue-400"></i>
+                <span id="header-stones" class="font-bold text-yellow-400">0</span>
+                <i class="fas fa-plus-circle text-xs text-green-500"></i>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE CONTENT AREA -->
+        <main id="main-content" class="flex-1 overflow-y-auto p-4 pb-20 relative">
+            <!-- Sections will be injected here via JS -->
+        </main>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="bg-slate-800 border-t border-slate-700 absolute bottom-0 w-full h-16 flex justify-around items-center z-20">
+            <button onclick="showSection('home')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition" data-target="home">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-[10px]">Home</span>
+            </button>
+            <button onclick="showSection('store')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition" data-target="store">
+                <i class="fas fa-shopping-cart text-xl mb-1"></i>
+                <span class="text-[10px]">Store</span>
+            </button>
+            <button onclick="showSection('cs')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition" data-target="cs">
+                <i class="fas fa-crosshairs text-xl mb-1"></i>
+                <span class="text-[10px]">CS</span>
+            </button>
+            <button onclick="showSection('rules')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition" data-target="rules">
+                <i class="fas fa-book text-xl mb-1"></i>
+                <span class="text-[10px]">Rules</span>
+            </button>
+            <button onclick="showSection('profile')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-blue-500 transition" data-target="profile">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-[10px]">Profile</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODALS -->
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div id="modal-content" class="bg-slate-800 w-full max-w-sm rounded-xl p-6 relative border border-slate-700 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>  
+</body>
+</html>
